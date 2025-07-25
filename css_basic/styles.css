@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    background-color: #d8dcdd;
+    flex-direction: column;
+}
+
+.parent {
+  display: flex;
+  flex-direction: row;
+  background-color: #d8dcdd;
+  flex:auto;
+}
+
+.child1 {
+  flex: 2;
+
+}
+
+.child2 {
+  flex: 1;
+  overflow-y: auto;
+
+}
+footer , p {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
