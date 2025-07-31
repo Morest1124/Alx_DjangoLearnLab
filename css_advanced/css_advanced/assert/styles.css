@@ -1,12 +1,13 @@
 :root {
   --text-color: #ffffff;
-  --background-color:#ffffff;
+  --background-color: #ffffff;
   --weather-present:hsl(274, 99%, 72%);
   --free_membership:hsl(214, 71%, 9%);
 }
 
 * {
   font-family: Source Sans Pro;
+  font-size: 16px;
 }
 
 body {
@@ -16,95 +17,312 @@ body {
   color: var(--text-color);
   background-size: contain;
   font-family: Source Sans Pro;
+  font-size: 16px;
+  overflow-x: hidden;
 }
 
-nav img {
-  display: inline;
-}
-
-nav ul {
-  list-style: none;
-  margin: 0;
-  margin-right: 120px;
-  padding: 0;
+header {
   display: flex;
-  justify-content: flex-end;
-  background-color: transparent;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav li {
-  margin-right: 5px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav a {
-  color: var(--text-color);
+.logo {
+  width: 200px;
+}
+
+.nav ul {
+  list-style: none;
+  margin: 10;
+  padding: 10;
+  display: flex;
+}
+.nav ul li {
+  margin-right: 50px;
+  padding-right: 10px;
+}
+.nav ul li a {
   text-decoration: none;
-  font-size: smaller;
-  padding: 20px;
-  justify-content: center;
+  color: var(--text-color);
+  font: 0.8em Source Sans Pro;
 }
-
-nav a:hover {
+.nav ul a:hover {
   color: var(--free_membership);
 }
 
-#get {
-  background-color: transparent;
-  color: var(--text-color);
+.container {
   text-align: center;
-  font-weight: bolder;
-  font-size: 6rem;
+  margin-top: 150px;
 }
 
-#reg {
-  display: inline-block;
+h1 {
+  font-size: 110px;
+  color: var(--text-color);
+  margin-bottom: 5px;
+  box-shadow: 0 0 10px rgba(16, 81, 221, 0.1);
+}
+
+.tags {
+  margin-bottom: 25px;
+}
+
+.tags span {
+  color: var(--text-color);
+  margin: 0 15px;
+  font-size: 14px;
+}
+
+.register-btn {
   background-color: var(--weather-present);
   color: var(--text-color);
-  text-align: center;
-  margin: 80px;
-  padding: 50px;
+  border: 5px --free_membership;
+  padding: 10px 15px;
+  border-radius: 30px;
+  padding-top: -5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 12px;
 }
 
-.attition {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  color: var(--free_membership);
-  text-align: center;
-}
-.attition h1 {
-  display: flex;
-}
-.attition span {
-  display: flex;
-  flex-direction: row;
-  margin: 50px;
-  text-align: center;
+.register-btn:hover {
+  background-color: var(--free_membership);
+  color: var(--text-color);
+  margin-top: 100px;
 }
 
-.grid {
+.learn h2 {
+  text-align: center;
+  padding-top: 100px;
+  font-size: 2rem;
+}
+.learn h2 span {
+  color: var(--weather-present);
+  font-size: 2rem;
+}
+.learn .grid {
   display: grid;
-  grid-template-columns: 1fr;
-  border: 5px solid black;
+  grid-template-columns: 25% 25% 25% 25% 1fr 1fr 1fr 1fr;
+  justify-content: space-around;
+  margin-top: 10px;
+  padding-left: 15rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
 }
-.grid #Phillip_Massey {
-  border-color: 5px var(--free_membership);
+.learn img {
+  border-radius: 90px;
+  height: 150px;
+  width: 150px;
+}
+.learn p:hover {
+  color: var(--weather-present);
+}
+.learn h3:hover {
+  color: var(--weather-present);
 }
 
 .weather {
   display: flex;
-  flex-direction: row;
   background-color: var(--weather-present);
-  color: var(--text-color);
+  padding-bottom: 80px;
+  margin-left: -8px;
+  width: 105%;
+  margin-top: -2.5px;
+  justify-content: center;
+  align-items: center;
+}
+.weather img {
+  display: flex;
+  padding-left: 80px;
+  margin-left: 150px;
+  padding: 30px;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+}
+.weather .text {
+  text-align: start;
+  flex-wrap: wrap;
 }
 
-.text {
-  color: var(--free_membership);
+h2 {
   text-align: center;
-  padding-top: 0;
-  padding-top: 5;
+  color: var(--free_membership);
+  padding-top: 100px;
+}
+
+.rating {
+  color: var(--weather-present);
+  gap: 20px;
+  padding: 10px;
+}
+.rating i {
+  padding-top: 40px;
+}
+.rating span {
+  color: rgb(209, 208, 208);
+}
+
+#most {
+  color: var(--free_membership);
+}
+#most span {
+  color: var(--weather-present);
+}
+
+.grid-container {
+  display: flex;
+  gap: 20px;
+}
+
+.grid-item {
+  width: 50%;
+  position: relative;
+  color: var(--free_membership);
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item img {
+  width: 100%;
+  height: auto;
+  color: var(--weather-present);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.themnail {
+  position: absolute;
+  z-index: 1;
+  border-radius: 100px;
+  width: 50px;
+  height: 50px;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
   justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#Phillip_Massey_one {
+  width: 30px;
+  height: 30px;
+}
+
+#FNQ1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.faq {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  background-color: var(--background-color);
+  color: var(--free_membership);
+  padding: 150px;
+  padding-top: -100;
+  padding-bottom: 50px;
+}
+.faq p {
+  opacity: 50%;
+}
+
+.Paragraphy {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  padding: 10px;
+  padding-top: -100px;
+  font-size: 16px;
+}
+
+.Paragraphy h3 {
+  margin-top: 0;
+  padding-top: -100px;
+}
+
+#freemembership {
+  background-color: var(--free_membership);
+}
+
+#Free {
+  display: grid;
+  grid-template-columns: 20% 1fr 1fr 1fr 1fr;
+  background-color: var(--free_membership);
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  padding: 10px;
+}
+#Free div {
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 30px;
+}
+
+#membership {
+  color: var(--text-color);
+  z-index: 2;
+  padding-top: 10;
+}
+#membership span {
+  color: var(--weather-present);
+}
+
+#reg-btn {
+  display: flex;
+  background-color: var(--weather-present);
+  color: var(--text-color);
+  margin-top: -70px;
+  margin-left: 45%;
+  padding: 15px;
+  border-radius: 30px;
+}
+
+#col {
+  background-color: var(--free_membership);
+  margin-left: -5;
+  width: 100% auto;
+}
+#col p {
+  text-align: center;
+  color: var(--text-color);
+  opacity: 50%;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--free_membership);
+  padding: 8rem;
+}
+
+.icon {
+  display: flex;
+  gap: 10px;
+}
+
+.icon i {
+  background-color: var(--background-color);
+  color: var(--free_membership);
+  border: 2px solid --weather-present;
+  padding: 10px;
+  border-radius: 50%;
+  align-items: center;
+}
+
+#rights {
+  padding: 20px;
 }
 
 /*# sourceMappingURL=styles.css.map */
