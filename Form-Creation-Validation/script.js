@@ -1,12 +1,10 @@
-addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", (event) => {
   const Form = document.getElementById("registration-form");
 
-  const feedbackDiv = document.getElementById("feedback");
+  const feedbackDiv = document.getElementById("form-feedback");
 
   const form = document.addEventListener("submit", function (event) {
     event.preventDefault();
-    const isValid = true;
-    const messages = [console.error()];
   });
 
   const userName = document.getElementById("username");
@@ -21,9 +19,9 @@ addEventListener("DOMContentLoaded", (event) => {
   const passwordInput = password.value.trim();
 
   let isValid = true;
-  let messages = [];
+  let messages = [console.error()];
 
-  if (userName.length < 3) {
+  if (userNameInput.length < 3) {
     isValid = false;
     messages = "Usename should be at least 3 characters long";
   } else {
@@ -36,7 +34,7 @@ addEventListener("DOMContentLoaded", (event) => {
     console.log(email.innerText);
   }
 
-  if (password.length < 8) {
+  if (passwordInput.length < 8) {
     isValid = false;
     messages = "You passwaord should be atleast 8 characters";
   } else {
