@@ -1,4 +1,4 @@
-   Book = Book.object.create(
+   Book = Book.objects.create(
         title = "1984",
         author = "George Orwell",
         publication_year = date(1949)
