@@ -6,6 +6,7 @@ from .models import Book
 @admin.register(models)
 class modelsAdmin(admin.ModelAdmin):
     list_filter = ('title', 'author', 'publication_year')
+    search_fields = ('title', 'author', 'publication_year')
 
     
     
