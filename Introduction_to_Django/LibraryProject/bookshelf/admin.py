@@ -5,7 +5,7 @@ from .models import Book
 
 @admin.register(models)
 class modelsAdmin(admin.ModelAdmin):
-    Book = ('title', 'author', 'publication_year')
+    list_filter = ('title', 'author', 'publication_year')
 
     
     
