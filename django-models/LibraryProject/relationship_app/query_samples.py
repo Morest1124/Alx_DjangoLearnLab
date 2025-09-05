@@ -7,13 +7,13 @@ def get_books_by_author(author_name):
     Queries all books by a specific author.
     """
     try:
-        author = Author.objects.filter(author=author)
+        author = Author.objects.filter(name=author_name)
         books = author.book_set.all()  # Use the default related_name or the one you defined
         print(f"Books by {author.name}:")
         for book in books:
             print(f"- {book.title}")
     except Author.DoesNotExist:
-        print(f"Author '{author}' not found.")
+        print(f"Author '{author_name}' not found.")
 
 def get_books_in_library(library_name):
     """
