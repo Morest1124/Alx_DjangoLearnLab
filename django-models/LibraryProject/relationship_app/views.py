@@ -9,13 +9,13 @@ def book_list(request):
     books = Book.objects.all()
     authors = Author.objects.all()
     context = {'books': books, 'authors': authors}
-    return render(request, 'books/book_list.html', context)
+    return render(request, 'relationship_app/list_books.html', context)
 
 # Class-based view
 class BookDetailView(DetailView):
     """Get a single book and display its details."""
     model = Book
-    template_name = 'books/book_detail.html'
+    template_name = 'relationship_app/book_detail.html'
     context_object_name = 'book'
 
     def get_context_data(self, **kwargs):
