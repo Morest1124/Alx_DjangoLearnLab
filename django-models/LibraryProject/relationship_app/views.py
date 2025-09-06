@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic.detail import DetailView
 from .models import Book, Author, Library
 from .models import Library
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 # Function-based view
