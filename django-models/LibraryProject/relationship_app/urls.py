@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.views.generic.detail import DetailView
 from .views import book_list
 
+
 urlpatterns = [
     path('books/', views.book_list, name='book_list'),
     path('books/<int:pk>/', views.BookDetailView.as_view(), name='book_detail'),
