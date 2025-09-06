@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 # Function-based view
-def book_list(request):
+def list_books(request):
     """Get all books and authors."""
     books = Book.objects.all()
     authors = Author.objects.all()
@@ -43,3 +43,10 @@ class LibraryDetailView(DetailView):
         library = self.get_object()
         context['books_in_library'] = library.books.all() # Assuming a reverse relationship from Library to Book
         return context
+    
+  
+def register(request):
+    # Registration logic 
+     if request.method == 'POST': ...
+     return render(request, 'users/register.html', {})
+     pass 
