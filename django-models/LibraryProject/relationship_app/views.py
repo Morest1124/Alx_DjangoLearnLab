@@ -10,7 +10,7 @@ def book_list(request):
     books = Book.objects.all()
     authors = Author.objects.all()
     context = {'books': books, 'authors': authors}
-    return render(request, 'relationship_app/library_detail.html', context)
+    return render(request, 'relationship_app/list_books.html', context)
 
 # Class-based view
 class BookDetailView(DetailView):
@@ -32,7 +32,7 @@ class BookDetailView(DetailView):
 class LibraryDetailView(DetailView):
     """Display details for a specific library, including its books."""
     model = Library
-    template_name = 'libraries/library_detail.html'
+    template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
     def get_context_data(self, **kwargs):
