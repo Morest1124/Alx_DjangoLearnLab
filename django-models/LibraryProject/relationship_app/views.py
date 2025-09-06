@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Book, Author, Library
+from .models import Library
 # Create your views here.
 
 # Function-based view
@@ -9,7 +10,7 @@ def book_list(request):
     books = Book.objects.all()
     authors = Author.objects.all()
     context = {'books': books, 'authors': authors}
-    return render(request, 'relationship_app/list_books.html', context)
+    return render(request, 'relationship_app/library_detail.html', context)
 
 # Class-based view
 class BookDetailView(DetailView):
