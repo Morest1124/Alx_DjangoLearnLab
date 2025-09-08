@@ -82,18 +82,18 @@ def admin_view(request):
     """
     View for administrators. Accessible only to users with the 'Admin' role.
     """
-    return render(request, 'relationship_app/admin_dashboard.html', {'message': 'Welcome, Admin!'})
+    return render(request, 'relationship_app/admin_view.html', {'message': 'Welcome, Admin!'})
 
 @user_passes_test(is_librarian)
 def librarian_view(request):
     """
     View for librarians. Accessible only to users with the 'Librarian' role.
     """
-    return render(request, 'relationship_app/librarian_dashboard.html', {'message': 'Welcome, Librarian!'})
+    return render(request, 'relationship_app/librarian_view.html', {'message': 'Welcome, Librarian!'})
 
 @user_passes_test(is_member)
 def member_view(request):
     """
     View for members. Accessible only to users with the 'Member' role.
     """
-    return render(request, 'relationship_app/member_dashboard.html', {'message': 'Welcome, Member!'})
+    return render(request, 'relationship_app/member_view.html', {'message': 'Welcome, Member!'})
