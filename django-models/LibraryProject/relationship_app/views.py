@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import views as auth_views
 from .models import Book, Author, Library, UserProfile
+from django.contrib.auth import login
 from .forms import BookForm
 
 # Custom test functions for decorators
