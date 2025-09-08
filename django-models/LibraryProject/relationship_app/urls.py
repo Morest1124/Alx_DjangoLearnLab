@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    path('books/', views.book_list, name='list_books'),
+    path('books/', views.list_books, name='list_books'),
     path('books/<int:pk>/', views.BookDetailView.as_view(), name='book_detail'),
     path('libraries/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
     

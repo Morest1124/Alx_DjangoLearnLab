@@ -35,7 +35,7 @@ def get_librarian_for_library(library_name):
     """
     try:
         library = Library.objects.get(name=library_name)
-        librarian = Librarian.objects.get(library=)
+        librarian = Librarian.objects.get(library="")
         librarian = library.librarian.all()
         print(f"\nLibrarian for {library.name} Library:")
         print(f"- {librarian.name}")
@@ -48,17 +48,7 @@ def get_librarian_for_library(library_name):
         print(f"No librarian found for '{library_name}'.")
 
 if __name__ == '__main__':
-    # --- Example Usage ---
 
-    # Make sure you have some data in your database.
-    # For example, you can use the Django shell to create these objects:
-    # >>> from relationship_app.models import Author, Book, Library, Librarian
-    # >>> author1 = Author.objects.create(name='J.K. Rowling')
-    # >>> book1 = Book.objects.create(title='Harry Potter and the Sorcerer\'s Stone', author=author1)
-    # >>> book2 = Book.objects.create(title='Harry Potter and the Chamber of Secrets', author=author1)
-    # >>> library1 = Library.objects.create(name='Central Library')
-    # >>> library1.books.add(book1, book2)
-    # >>> librarian1 = Librarian.objects.create(name='Ms. Eleanor Vance', library=library1)
     
     get_books_by_author('J.K. Rowling')
     get_books_in_library('Central Library')
