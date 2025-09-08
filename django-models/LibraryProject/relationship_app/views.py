@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
 from .models import Book, Author, Library
 from .models import Library
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import views as auth_views
 # Create your views here.
 
 # Function-based view
@@ -46,7 +48,22 @@ class LibraryDetailView(DetailView):
     
   
 def register(request):
-    # Registration logic 
-     if request.method == 'POST': ...
-     return render(request, 'users/register.html', {})
-     pass 
+    # Check if the form has been submitted
+    if request.method == 'POST':
+        # Create a form instance from the submitted data
+        form = UserCreationForm(request.POST)
+        # Check if the form data is valid
+        if form.is_valid():
+            # Save the new user to the database
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            # Redirect to the login page
+            return redirect('login')
+    # If it's a GET request (or form is invalid)
+    else:
+        # Create an empty form instance
+        form = UserCreationForm()
+    
+    # Render the registration page with the form
+    return render(request, 'relationship_app/register.html', {'form': form})
