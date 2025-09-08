@@ -1,5 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 
 # Create your models here.
 class Author(models.Model):
@@ -34,9 +39,34 @@ class Librarian(models.Model):
         return self.name
     
     
+# Define the user roles as choices
+ROLES_CHOICES = (
+    ('Admin', 'Admin'),
+    ('Librarian', 'Librarian'),
+    ('Member', 'Member'),
+)
+
 class UserProfile(models.Model):
-    role = models.CharField(max_length=30)
-    Admin = models.CharField(max_length=10)
-    Members = models.CharField(max_length=10000000000000)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-  
+    """
+    Extends the Django User model to include a role for role-based access control.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLES_CHOICES, default='Member')
+
+    def __str__(self):
+        return self.user.username
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    Signal receiver to create a UserProfile automatically when a new User is created.
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """
+    Signal receiver to save the UserProfile when the User is saved.
+    """
+    instance.userprofile.save()

@@ -14,5 +14,12 @@ urlpatterns = [
     path('register/', views.register, name='register'),    
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    
+     # URL for the Admin dashboard
+    path('admin/', views.admin_view, name='admin_dashboard'),    
+    # URL for the Librarian dashboard
+    path('librarian/', views.librarian_view, name='librarian_dashboard'),    
+    # URL for the Member dashboard
+    path('member/', views.member_view, name='member_dashboard'),
 
 ]
