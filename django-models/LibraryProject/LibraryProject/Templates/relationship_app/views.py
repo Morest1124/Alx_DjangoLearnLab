@@ -4,6 +4,7 @@ from .models import Book, Author, Library
 from .models import Library
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 # Create your views here.
 
 # Function-based view
@@ -46,7 +47,14 @@ class LibraryDetailView(DetailView):
     
   
 def register(request):
-    # Registration logic 
      if request.method == 'POST': ...
-     return render(request, 'users/register.html', {})
+     form = UserCreationForm(request.POST)
+     if form.is_valid():
+         user = form.save()
+         login(request, user)
+         return redirect('home')
+     else:
+         return render(request, 'users/register.html', context)
      pass 
+ 
+ 
