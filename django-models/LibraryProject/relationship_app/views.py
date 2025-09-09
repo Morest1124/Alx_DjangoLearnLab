@@ -12,13 +12,13 @@ from .form import BookForm
 
 # Custom test functions for decorators
 def is_admin(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Admin'
 
 def is_librarian(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Librarian'
 
 def is_member(user):
-    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Member'
 
 # Class-based views for authentication
 class LoginView(auth_views.LoginView):
@@ -110,7 +110,7 @@ def edit_book(request, pk):
         form = BookForm(instance=book)
     return render(request, 'relationship_app/edit_book.html', {'form': form, 'book': book})
 
-@permission_required('relationship_app.can_delete_book', raise_exception=True)
+@permission_4_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
