@@ -23,10 +23,6 @@ urlpatterns = [
     path('admin/', views.admin_view, name='admin_view'),
     
     
-    
-    
-    
-    
     # URLs for the Book CRUD operations
     path('add_book/', views.add_book, name='add_book'),
     path('edit_book/<int:pk>/', views.edit_book, name='edit_book'),
