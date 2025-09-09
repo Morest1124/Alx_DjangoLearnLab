@@ -74,15 +74,15 @@ def register(request):
 # Role-based views for dashboards
 @user_passes_test(is_admin)
 def admin_view(request):
-    return render(request, 'relationship_app/admin_dashboard.html', {'user': request.user})
+    return render(request, 'relationship_app/admin_view.html', {'user': request.user})
 
 @user_passes_test(is_librarian)
 def librarian_view(request):
-    return render(request, 'relationship_app/librarian_dashboard.html', {'user': request.user})
+    return render(request, 'relationship_app/librarian_view.html', {'user': request.user})
 
 @user_passes_test(is_member)
 def member_view(request):
-    return render(request, 'relationship_app/member_dashboard.html', {'user': request.user})
+    return render(request, 'relationship_app/member_view.html', {'user': request.user})
 
 # Views with permission checks for Book model
 @permission_required('relationship_app.can_add_book', raise_exception=True)
@@ -110,7 +110,7 @@ def edit_book(request, pk):
         form = BookForm(instance=book)
     return render(request, 'relationship_app/edit_book.html', {'form': form, 'book': book})
 
-@permission_4_required('relationship_app.can_delete_book', raise_exception=True)
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
