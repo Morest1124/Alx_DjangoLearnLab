@@ -32,9 +32,9 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
-objects = CustomUserManager()
+    objects = CustomUserManager()
 
-groups = models.ManyToManyField(
+    groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
         blank=True,
@@ -44,7 +44,7 @@ groups = models.ManyToManyField(
         related_name="customuser_set",
         related_query_name="customuser",
     )
-user_permissions = models.ManyToManyField(
+    user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
         blank=True,
@@ -53,10 +53,29 @@ user_permissions = models.ManyToManyField(
         related_query_name="customuser",
     )
 
-def __str__(self):
+    def __str__(self):
         return self.email
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField(default=2022)
+
+class CustomPermission(models.Model):
+    can_add_books = models.BooleanField(default=False)  
+    can_delete_books = models.BooleanField(default=False)
+    can_view_books = models.BooleanField(default=False)
+    can_edit_books = models.BooleanField(default=False)
+
+    can_create = models.BooleanField(default=False)
+
+    can_delete_users = models.BooleanField(default=False)
+    can_view_users = models.BooleanField(default=False)
+    can_edit_users = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Custom Permission"
+        verbose_name_plural = "Custom Permissions"  
+
+    def __str__(self):
+        return "Custom Permissions"
