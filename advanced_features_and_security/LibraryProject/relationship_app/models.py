@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.models import User
+
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
@@ -63,14 +63,14 @@ class UserProfile(models.Model):
     """
     Extends the Django User model to include a role for role-based access control.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLES_CHOICES, default='Member')
 
     def __str__(self):
         return self.user.username
 
 # These functions are signal receivers. They listen for the 'post_save' event from the User model.
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     """
     Signal receiver to create a UserProfile automatically when a new User is created.
@@ -79,7 +79,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         # When a new User instance is created, this automatically creates a corresponding UserProfile.
         UserProfile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
     """
     Signal receiver to save the UserProfile when the User is saved.
