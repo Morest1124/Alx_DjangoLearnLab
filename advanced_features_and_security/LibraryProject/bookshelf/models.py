@@ -84,3 +84,18 @@ class CustomUser(AbstractUser):
         can_delete_books = models.BooleanField(default=False)
         can_view_books = models.BooleanField(default=False)
         can_edit_books = models.BooleanField(default=False)
+
+        can_create_users = models.BooleanField(default=False)
+
+        can_delete_users = models.BooleanField(default=False)
+        can_view_users = models.BooleanField(default=False)
+
+        can_edit_users = models.BooleanField(default=False)
+
+        class Meta:
+            verbose_name = "Custom Permission"
+
+            verbose_name_plural = "Custom Permissions"  
+
+    def __str__(self):
+        return "Custom Permissions"
