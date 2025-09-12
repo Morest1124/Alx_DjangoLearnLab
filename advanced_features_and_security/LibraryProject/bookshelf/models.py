@@ -23,10 +23,10 @@ class CustomUser(AbstractUser):
     #     return self.email
     
 
-    class CustomUserManager(BaseUserManager):
+    class Custom_User_Manager(BaseUserManager):
 
         # Custom user creation method
-        def createUser(self, email, password=None, **extra_fields):
+        def create_user(self, email, password=None, **extra_fields):
             if not email:
                 raise ValueError('The Email field must be set')
             email = self.normalize_email(email) # Normalize the email address for consistency
@@ -52,10 +52,10 @@ class CustomUser(AbstractUser):
                 raise ValueError('Superuser must have is_superuser=True.')
 
             # Create and return the superuser using the custom user creation method
-            return self.createUser(email, password, **extra_fields)
+            return self.create_user(email, password, **extra_fields)
 
 
-    objects = CustomUserManager() # Assign the custom manager to the objects attribute
+    objects = Custom_User_Manager() # Assign the custom manager to the objects attribute
 
     def __str__(self):
         return self.email
