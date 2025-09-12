@@ -85,7 +85,7 @@ class CustomUser(AbstractUser):
         can_view_books = models.BooleanField(default=False)
         can_edit_books = models.BooleanField(default=False)
 
-        can_create_users = models.BooleanField(default=False)
+        can_create = models.BooleanField(default=False)
 
         can_delete_users = models.BooleanField(default=False)
         can_view_users = models.BooleanField(default=False)
