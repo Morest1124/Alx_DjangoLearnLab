@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
     #     return self.email
     
 
-    class Custom_User_Manager(BaseUserManager):
+    class CustomUserManager(BaseUserManager):
 
         # Custom user creation method
         def create_user(self, email, password=None, **extra_fields):
@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
             return self.create_user(email, password, **extra_fields)
 
 
-    objects = Custom_User_Manager() # Assign the custom manager to the objects attribute
+    objects = CustomUserManager() # Assign the custom manager to the objects attribute
 
     def __str__(self):
         return self.email
