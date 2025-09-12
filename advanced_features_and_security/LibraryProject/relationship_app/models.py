@@ -4,9 +4,6 @@ from django.contrib import admin
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import BaseUserManager
-
 
 # Create your models here.
 class Author(models.Model):
@@ -86,73 +83,3 @@ def save_user_profile(sender, instance, **kwargs):
     """
     # When the User instance is saved, this ensures its associated UserProfile is also saved.
     instance.userprofile.save()
-
-
-class CustomUser(AbstractUser):
-    date_of_birth = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    email = models.EmailField(unique=True)
-    
-    USERNAME_FIELD = 'email' # Use email as the unique identifier for authentication
-    REQUIRED_FIELDS = []    # No additional fields are required for user creation
-    
-    # The __str__ method is commented out, but if uncommented, it would return the user's email.
-    # def __str__(self):
-    #     return self.email
-    
-
-    class CustomUserManager(BaseUserManager):
-
-        # Custom user creation method
-        def customeUser(self, email, password=None, **extra_fields):
-            if not email:
-                raise ValueError('The Email field must be set')
-            email = self.normalize_email(email) # Normalize the email address for consistency
-            user = self.model(email=email, **extra_fields) # Create a new user instance
-            user.set_password(password) # Set the user's password
-            user.save(using=self._db) # Save the user to the database
-
-            # Return the created user
-
-            return user
-
-        # Custom superuser creation method
-        def create_superuser(self, email, password=None, **extra_fields):
-            extra_fields.setdefault('is_staff', True)
-            extra_fields.setdefault('is_superuser', True)
-            extra_fields.setdefault('is_active', True)
-            extra_fields.setdefault('is_admin', True)
-            # Ensure that the superuser has staff and superuser permissions
-
-            if extra_fields.get('is_staff') is not True:
-                raise ValueError('Superuser must have is_staff=True.')
-            if extra_fields.get('is_superuser') is not True:
-                raise ValueError('Superuser must have is_superuser=True.')
-
-            # Create and return the superuser using the custom user creation method
-            return self.customeUser(email, password, **extra_fields)
-
-
-    objects = CustomUserManager() # Assign the custom manager to the objects attribute
-
-    def __str__(self):
-        return self.email
-
-    class ModelAdmin(admin.ModelAdmin):
-        list_display = ('email', 'is_staff', 'is_superuser', 'is_active', 'is_admin')
-        search_fields = ('email',)
-        list_filter = ('is_staff', 'is_superuser', 'is_active')
-        ordering = ('email',)
-        filter_horizontal = ()
-        fieldsets = (
-            (None, {'fields': ('email', 'password')}),
-            ('Personal info', {'fields': ('date_of_birth', 'profile_picture')}),
-            ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-            ('Important dates', {'fields': ('last_login', 'date_joined')}),
-        )     add_fieldsets = (
-            (None, {
-                'classes': ('wide',),
-                'fields': ('email', 'date_of_birth', 'profile_picture', 'password1', 'password2'),
-            }),
-        )
-        
