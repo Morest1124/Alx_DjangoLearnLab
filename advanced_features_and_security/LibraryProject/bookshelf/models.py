@@ -78,3 +78,9 @@ class CustomUser(AbstractUser):
             }),
         )
         
+    class CustomPermission(models.Model):
+
+        can_add_books = models.BooleanField(default=False)  
+        can_delete_books = models.BooleanField(default=False)
+        can_view_books = models.BooleanField(default=False)
+        can_edit_books = models.BooleanField(default=False)
