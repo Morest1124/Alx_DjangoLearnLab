@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib import admin
+from django.test import TestCase, Client
+from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 class Book(models.Model):
@@ -53,12 +56,10 @@ class CustomUser(AbstractUser):
 
             # Create and return the superuser using the custom user creation method
             return self.create_user(email, password, **extra_fields)
+            objects = CustomUserManager() # Assign the custom manager to the objects attribute
 
-
-    objects = CustomUserManager() # Assign the custom manager to the objects attribute
-
-    def __str__(self):
-        return self.email
+    # def __str__(self):
+    #     return self.email
 
     class ModelAdmin(admin.ModelAdmin):
         list_display = ('email', 'is_staff', 'is_superuser', 'is_active', 'is_admin')
@@ -71,7 +72,8 @@ class CustomUser(AbstractUser):
             ('Personal info', {'fields': ('date_of_birth', 'profile_picture')}),
             ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
             ('Important dates', {'fields': ('last_login', 'date_joined')}),
-        )     add_fieldsets = (
+        )     
+        add_fieldsets = (
             (None, {
                 'classes': ('wide',),
                 'fields': ('email', 'date_of_birth', 'profile_picture', 'password1', 'password2'),
@@ -99,3 +101,16 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return "Custom Permissions"
+    
+    class permissionTests(TestCase):
+        def setUp(self):
+            self.client = Client()
+            self.user_no_perm = User.objects.create_user(username='user_no_perm', password='testpass')
+            self.user_with_perm = User.objects.create_user(username='user-WITH-perm', password='password')
+
+#get content type of model.
+
+Content_type = ContentType.objects.get_for_model(model=Book)
+
+#get specific perm
+permission = Permission.objects.get(content_type=Content_type, codename='can_view_book')
