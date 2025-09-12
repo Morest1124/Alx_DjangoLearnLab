@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship/_app',
+    'relationship_app',
 ]
-AUTH_USER_MODELS = 'relationship/_app'
+AUTH_USER_MODEL = 'relationship_app.CustomUser'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

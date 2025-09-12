@@ -11,9 +11,11 @@ class Author(models.Model):
     def __str__(self):
         return self.name
     
-    
+
+# Book Model: Represents a book in the library
 class Book(models.Model):
     title = models.CharField(max_length=30)
+    # Establishes a many-to-one relationship with the Author model.
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
     published_date = models.DateField(null=True, blank=True)
     
@@ -23,12 +25,13 @@ class Book(models.Model):
             ("can_change_book", "Can change a book"),
             ("can_delete_book", "Can delete a book"),
         )
+        # Defines custom permissions for the Book model.        
     
     def __str__(self):
         return self.title
     
     
-    
+   # Library Model: Represents a library that contains multiple books. 
 class Library(models.Model):
     name = models.CharField(max_length=30)
     books = models.ManyToManyField(Book, related_name='library')
@@ -62,12 +65,14 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+# These functions are signal receivers. They listen for the 'post_save' event from the User model.
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """
     Signal receiver to create a UserProfile automatically when a new User is created.
     """
     if created:
+        # When a new User instance is created, this automatically creates a corresponding UserProfile.
         UserProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
@@ -75,4 +80,5 @@ def save_user_profile(sender, instance, **kwargs):
     """
     Signal receiver to save the UserProfile when the User is saved.
     """
+    # When the User instance is saved, this ensures its associated UserProfile is also saved.
     instance.userprofile.save()
