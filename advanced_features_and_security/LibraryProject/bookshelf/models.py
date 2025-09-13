@@ -32,6 +32,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
+    
     objects = CustomUserManager()
 
     groups = models.ManyToManyField(
@@ -80,4 +81,10 @@ class CustomPermission(models.Model):
         verbose_name_plural = "Custom Permissions"  
 
     def __str__(self):
+
         return "Custom Permissions"
+
+
+admin.site.register(CustomUser)
+admin.site.register(Book)
+admin.site.register(CustomPermission)
