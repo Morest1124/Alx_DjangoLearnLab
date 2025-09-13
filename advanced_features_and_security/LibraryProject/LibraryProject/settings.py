@@ -141,12 +141,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DEBUG = False
 
 # HTTPS Settings
+
 # Redirect all non-HTTPS requests to HTTPS.
 SECURE_SSL_REDIRECT = True
 # Ensure session cookies are only transmitted over HTTPS.
 SESSION_COOKIE_SECURE = True
 # Ensure CSRF cookies are only transmitted over HTTPS.
 CSRF_COOKIE_SECURE = True
+# Tells Django to trust the X-Forwarded-Proto header from a proxy.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # HTTP Strict Transport Security (HSTS) Settings
 SECURE_HSTS_SECONDS = 31536000
