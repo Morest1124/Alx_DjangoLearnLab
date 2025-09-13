@@ -137,13 +137,31 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SECURE_BROWSER_XSS_FILTER = True #Prevent xss injections
-X_FRAME_OPTIONS = 'DENY'  # Prevents clickjacking
-SECURE_CONTENT_TYPE_NOSNIFF = True # Prevents MIME-sniffing
-CSRF_COOKIE_SECURE = True # Ensures CSRF cookie is only sent over HTTPS
-SESSION_COOKIE_SECURE = True # Ensures session cookie is only sent over HTTPS
+# SECURITY CONFIGURATION
+# DEBUG = False
 
+# HTTPS Settings
+# Redirect all non-HTTPS requests to HTTPS.
+SECURE_SSL_REDIRECT = True
+# Ensure session cookies are only transmitted over HTTPS.
+SESSION_COOKIE_SECURE = True
+# Ensure CSRF cookies are only transmitted over HTTPS.
+CSRF_COOKIE_SECURE = True
 
+# HTTP Strict Transport Security (HSTS) Settings
+SECURE_HSTS_SECONDS = 31536000
+# Include all subdomains in the HSTS policy.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# Allows the site to be submitted to the browser preload list.
+SECURE_HSTS_PRELOAD = True
+
+# Prevents the browser from interpreting files as a different MIME type.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# Prevents the page from being displayed in a frame, to avoid clickjacking.
+X_FRAME_OPTIONS = 'DENY'
+
+# Content Security Policy (CSP)
+# A whitelist of sources for content on the site.
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'",)
 CSP_IMG_SRC = ("'self'",)
