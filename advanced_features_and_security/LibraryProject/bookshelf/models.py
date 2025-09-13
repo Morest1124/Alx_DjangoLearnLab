@@ -62,6 +62,8 @@ class Book(models.Model):
     publication_year = models.IntegerField(default=2022)
 
 class CustomPermission(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='custom_permissions')
+
     can_add_books = models.BooleanField(default=False)  
     can_delete_books = models.BooleanField(default=False)
     can_view_books = models.BooleanField(default=False)

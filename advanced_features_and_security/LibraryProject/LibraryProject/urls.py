@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('relationships/', include('relationship_app.urls')),
     path('account/', include('django.contrib.auth.urls')),
+    path('bookshelf/', include('bookshelf.urls')),
 ]
