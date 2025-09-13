@@ -7,12 +7,7 @@
     <h1>Add New Book</h1>
     <form method="post">
         {% csrf_token %}
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="author">Author:</label><br>
-        <input type="text" id="author" name="author"><br>
-        <label for="publication_year">Publication Year:</label><br>
-        <input type="number" id="publication_year" name="publication_year"><br><br>
+        {{ form.as_p }}
         <input type="submit" value="Add Book">
     </form>
     <a href="{% url 'book_list' %}">Back to Book List</a>
