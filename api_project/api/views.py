@@ -4,6 +4,7 @@ from django.urls import path
 from .models import Book
 from rest_framework import viewsets
 from .serializers import BookSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -28,5 +29,7 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     
     # The serializer_class tells the ViewSet how to convert model instances
-    # into JSON data for the API.
     serializer_class = BookSerializer
+    
+    #only authenticated user access this endpoint
+    permission_classes = (IsAuthenticated,)
