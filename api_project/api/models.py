@@ -7,3 +7,5 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     
     
+    
+    
