@@ -1,14 +1,24 @@
+# api/models.py
 from django.db import models
 
-# Create your models here.
 class Author(models.Model):
-    name = models.CharField(max_length=100)
-    
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
-    title = models.Model(max_length =100)
-    publication_year = models.IntegerField(blank=False)
-    #one-to-many realationship
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    title = models.CharField(max_length=255)
+
+    publication_year = models.IntegerField()
+
+    # all their books are also deleted.
+    author = models.ForeignKey(
+        Author, 
+        on_delete=models.CASCADE,
+        related_name='books' # Allows Author objects to query their books
+    )
+
+    def __str__(self):
+        return f"{self.title} ({self.publication_year})"
     
-    class Meta:
-        model = models
