@@ -3,6 +3,7 @@ from .models import Book, Author
 from datetime import date 
 # Purpose: Serializes the Author model data. 
 class AuthorSerializer(serializers.ModelSerializer):
+    
     # The 'books' field will automatically be added if 'fields = "__all__"' is used, 
     class Meta:
         model = Author

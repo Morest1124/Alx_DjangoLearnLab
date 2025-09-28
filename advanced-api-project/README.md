@@ -93,3 +93,30 @@ To create a new book, send a POST request to the ListCreate endpoint:
   // IMPORTANT: 'author' must be the ID of an existing Author object.
 }
 ```
+
+## 4. Testing the API (Unit Tests)
+
+This project uses Django's built-in test framework to ensure the API endpoints are working correctly.
+
+### 4.1 Running the Tests
+
+To run the tests, navigate to the `advanced_api_project` directory and run the following command:
+
+```bash
+python manage.py test api
+```
+
+### 4.2 Test Scenarios
+
+The tests cover the following scenarios:
+
+*   **Book Creation**: Ensures that a book can be created with valid data and that invalid data is handled correctly.
+*   **Book List View**: Verifies that the list of books can be retrieved and that filtering, searching, and ordering functionalities work as expected.
+*   **Book Detail View**: Checks that a single book can be retrieved by its ID.
+*   **Book Update**: Confirms that a book can be updated with valid data.
+*   **Book Deletion**: Ensures that a book can be deleted.
+*   **Authentication and Permissions**: Verifies that unauthenticated users have read-only access.
+
+### 4.3 Interpreting the Test Results
+
+When you run the tests, you will see output indicating the status of each test. A successful test run will show `OK` at the end. If any tests fail, the output will provide details about the failures, which can help you identify and fix the issues.
