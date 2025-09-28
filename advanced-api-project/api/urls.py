@@ -1,12 +1,16 @@
 from django.urls import path
-from .views import BookListCreate, BookRetrieveUpdateDestroy
+from .views import (
+    BookListView,
+    BookDetailView,
+    BookCreateView,
+    BookUpdateView,
+    BookDeleteView,
+)
 
 urlpatterns = [
-    # Endpoint: /books/
-    # Maps to the BookListCreate view.
-    path('books/', BookListCreate.as_view(), name='book-list-create'),
-
-    # Endpoint: /books/<int:pk>/.
-    # Maps to the BookRetrieveUpdateDestroy view.
-    path('books/<int:pk>/', BookRetrieveUpdateDestroy.as_view(), name='book-detail-update-destroy'),
+    path('books/', BookListView.as_view(), name='book-list'),
+    path('books/create/', BookCreateView.as_view(), name='book-create'),
+    path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
+    path('books/<int:pk>/update/', BookUpdateView.as_view(), name='book-update'),
+    path('books/<int:pk>/delete/', BookDeleteView.as_view(), name='book-delete'),
 ]
