@@ -3,14 +3,16 @@ from .models import Book, Author
 from datetime import date 
 # Purpose: Serializes the Author model data. 
 class AuthorSerializer(serializers.ModelSerializer):
-    
+    books = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     # The 'books' field will automatically be added if 'fields = "__all__"' is used, 
     class Meta:
         model = Author
-        fields = ('id', 'name') # Changed 'field' to 'fields' and used a tuple
+        fields = ('id', 'name', 'books') # Changed 'field' to 'fields' and used a tuple
 
 # It handles conversion between complex Book objects and simple Python datatypes.
 class BookSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
     
     class Meta:
         model = Book
