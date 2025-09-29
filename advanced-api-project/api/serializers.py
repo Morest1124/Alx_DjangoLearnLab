@@ -17,6 +17,11 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__' # Corrected 'field' to 'fields'
+
+class BookWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__' # Corrected 'field' to 'fields'
         
     # Purpose: Ensures the publication year is not set to a year in the future.
     def validate_publication_year(self, value):
