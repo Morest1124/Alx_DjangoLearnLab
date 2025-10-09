@@ -1,8 +1,17 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+# accounts/urls.py
 
-router = DefaultRouter()
-router.register(r'/register', RegisterViews.as_view() , basename='register')
-router.register(r'/token_refresh',tokenViews.as_view() , basename='token_refresh')
-router.register(r'/login', loginViews.as_view() , basename='login')
-router.register(r'/Profile', ProfileViews.as_view() , basename='Profile')
+from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+from .views import RegisterView, ProfileView 
+
+urlpatterns = [
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+]
