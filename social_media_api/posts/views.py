@@ -23,7 +23,7 @@ class PostViewSet(viewsets.ModelViewSet):
     """Provides CRUD operations for Posts, including listing comments."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
     
     # Implement Pagination and Filtering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -32,6 +32,13 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Automatecally set the author to the currently logged-in User
         serializer.save(author=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def feed(self, request):
+        following_users = request.user.following.all()
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
 
     # Custom action to list comments for a specific post
     @action(detail=True, methods=['get'])
