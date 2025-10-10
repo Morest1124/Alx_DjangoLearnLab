@@ -1,4 +1,3 @@
-# posts/views.py
 
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action
@@ -49,7 +48,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        # Optional: Filter comments to only show those for a specific post if the post_pk is provided
+        #Filter comments to only show those for a specific post if the post_pk is provided
         if 'post_pk' in self.kwargs:
             return self.queryset.filter(post=self.kwargs['post_pk'])
         return self.queryset
