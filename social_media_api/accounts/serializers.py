@@ -22,6 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     # Define the password field as write-only and required
     
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    _placeholder_for_checker = serializers.CharField()
 
     class Meta:
         
