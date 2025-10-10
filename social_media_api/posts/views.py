@@ -1,7 +1,9 @@
-from rest_framework import viewsets, permissions, filters, status, generics
+from rest_framework import viewsets, permissions, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from notifications.models import Notification
@@ -90,7 +92,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         if 'post_pk' in self.kwargs:
-            post = generics.get_object_or_404(Post, pk=self.kwargs['post_pk'])
+            post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
             comment = serializer.save(author=self.request.user, post=post)
             
             # Create notification
@@ -104,12 +106,11 @@ class CommentViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(author=self.request.user)
 
-class LikeView(generics.GenericAPIView):
-    queryset = Post.objects.all()
+class LikeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = self.get_object()
+        post = get_object_or_404(Post, pk=pk)
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             return Response({'status': 'already liked'}, status=status.HTTP_400_BAD_REQUEST)
@@ -124,12 +125,11 @@ class LikeView(generics.GenericAPIView):
             )
         return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)
 
-class UnlikeView(generics.GenericAPIView):
-    queryset = Post.objects.all()
+class UnlikeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = self.get_object()
+        post = get_object_or_404(Post, pk=pk)
         try:
             like = Like.objects.get(user=request.user, post=post)
             like.delete()
