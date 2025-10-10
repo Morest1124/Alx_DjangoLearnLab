@@ -88,6 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'PORT': ''
     }
 }
 
@@ -126,7 +127,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Production static file hosting with AWS S3
+# To enable, ensure DEBUG is False and the following packages are installed:
+# pip install django-storages boto3
+#
+# Also, configure your AWS credentials and bucket name below.
+# It's recommended to use environment variables for sensitive data.
+
+if not DEBUG:
+    # AWS S3 & django-storages settings
+    AWS_ACCESS_KEY_ID = 'YOUR_AWS_ACCESS_KEY_ID'  # Replace with your AWS access key or use environment variable
+    AWS_SECRET_ACCESS_KEY = 'YOUR_AWS_SECRET_ACCESS_KEY'  # Replace with your AWS secret key or use environment variable
+    AWS_STORAGE_BUCKET_NAME = 'your-s3-bucket-name'  # Replace with your S3 bucket name
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
