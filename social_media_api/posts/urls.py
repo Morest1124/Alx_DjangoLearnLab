@@ -4,12 +4,12 @@ from rest_framework.routers import DefaultRouter
 from .views import PostViewSet, CommentViewSet
 from django.urls import path, include
 
-# 1. Standard Router for Posts
+# Standard Router for Posts
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)
 
 urlpatterns = [
-    path('feed/', PostViewSet.as_view({'get': 'feed'}), name='post-feed'),
+    path("feed/", PostViewSet.as_view({'get': 'feed'}), name='post-feed'),
     #post routes: /posts/, /posts/{id}/, /posts/{id}/comments/    
     path('', include(router.urls)), 
     
