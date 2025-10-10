@@ -8,9 +8,8 @@ from django.urls import path, include
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)
 
-
-
 urlpatterns = [
+    path('feed/', PostViewSet.as_view({'get': 'feed'}), name='post-feed'),
     #post routes: /posts/, /posts/{id}/, /posts/{id}/comments/    
     path('', include(router.urls)), 
     
