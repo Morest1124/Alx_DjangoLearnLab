@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import RegisterSerializer, CustomUserSerializer
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 class RegisterView(generics.GenericAPIView):
     queryset = CustomUser.objects.all()
@@ -34,6 +36,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user_to_follow == current_user:
             return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
         current_user.following.add(user_to_follow)
+        
+        # Create notification
+        Notification.objects.create(
+            recipient=user_to_follow,
+            actor=current_user,
+            verb='followed you'
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['post'])
@@ -52,6 +61,13 @@ class FollowView(APIView):
         if user_to_follow == current_user:
             return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
         current_user.following.add(user_to_follow)
+
+        # Create notification
+        Notification.objects.create(
+            recipient=user_to_follow,
+            actor=current_user,
+            verb='followed you'
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UnfollowView(APIView):

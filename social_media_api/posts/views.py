@@ -1,10 +1,13 @@
-
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Post, Comment
+from django.shortcuts import get_object_or_404
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
+from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
@@ -40,6 +43,33 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(posts, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        post = self.get_object()
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if not created:
+            return Response({'status': 'already liked'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create notification
+        if post.author != request.user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb='liked',
+                target=post
+            )
+        return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['post'])
+    def unlike(self, request, pk=None):
+        post = self.get_object()
+        try:
+            like = Like.objects.get(user=request.user, post=post)
+            like.delete()
+            return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)
+        except Like.DoesNotExist:
+            return Response({'status': 'not liked'}, status=status.HTTP_400_BAD_REQUEST)
+
     # Custom action to list comments for a specific post
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
@@ -61,10 +91,48 @@ class CommentViewSet(viewsets.ModelViewSet):
         return self.queryset
     
     def perform_create(self, serializer):
-        
         if 'post_pk' in self.kwargs:
             post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
-            serializer.save(author=self.request.user, post=post)
-        else:
+            comment = serializer.save(author=self.request.user, post=post)
             
+            # Create notification
+            if post.author != self.request.user:
+                Notification.objects.create(
+                    recipient=post.author,
+                    actor=self.request.user,
+                    verb='commented on',
+                    target=comment
+                )
+        else:
             serializer.save(author=self.request.user)
+
+class LikeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if not created:
+            return Response({'status': 'already liked'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create notification
+        if post.author != request.user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb='liked',
+                target=post
+            )
+        return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)
+
+class UnlikeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        try:
+            like = Like.objects.get(user=request.user, post=post)
+            like.delete()
+            return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)
+        except Like.DoesNotExist:
+            return Response({'status': 'not liked'}, status=status.HTTP_400_BAD_REQUEST)
