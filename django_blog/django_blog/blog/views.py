@@ -2,12 +2,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserUpdateForm, CommentForm
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .forms import UserUpdateForm, CommentForm, PostForm
 from .models import Post, Comment
+from taggit.models import Tag
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     posts = Post.objects.all()
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    tag = None
+
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
+
+    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag})
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -73,6 +82,19 @@ def edit_comment(request, comment_id):
         form = CommentForm(instance=comment)
 
     return render(request, 'blog/edit_comment.html', {'form': form, 'comment': comment})
+
+from django.db.models import Q
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__in=[query])
+        ).distinct()
+    else:
+        posts = Post.objects.none()
+
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
 
 @login_required
 def delete_comment(request, comment_id):
