@@ -2,41 +2,85 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import UserUpdateForm, CommentForm, PostForm
 from .models import Post, Comment
 from taggit.models import Tag
+from django.urls import reverse_lazy
 
-def post_list(request, tag_slug=None):
-    posts = Post.objects.all()
-    tag = None
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    ordering = ['-published_date']
 
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        posts = posts.filter(tags__in=[tag])
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            return Post.objects.filter(tags__in=[tag])
+        return Post.objects.all()
 
-    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag})
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
 
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()
-    if request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comments.all()
+        context['comment_form'] = CommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
-            new_comment.post = post
+            new_comment.post = self.object
             new_comment.author = request.user
             new_comment.save()
-            return redirect('post_detail', post_id=post.id)
-    else:
-        comment_form = CommentForm()
+            return redirect('post-detail', pk=self.object.pk)
+        return self.get(request, *args, **kwargs)
 
-    return render(
-        request,
-        'blog/post_detail.html',
-        {'post': post, 'comments': comments, 'comment_form': comment_form},
-    )
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('post-list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('post-list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('post-list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
 
 def register(request):
     if request.method == 'POST':
@@ -45,7 +89,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('post_list')
+            return redirect('post-list')
     else:
         form = UserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
@@ -71,13 +115,13 @@ def profile(request):
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.author:
-        return redirect('post_detail', post_id=comment.post.id)
+        return redirect('post_detail', pk=comment.post.pk)
 
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
-            return redirect('post_detail', post_id=comment.post.id)
+            return redirect('post_detail', pk=comment.post.pk)
     else:
         form = CommentForm(instance=comment)
 
@@ -100,10 +144,10 @@ def search(request):
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.author:
-        return redirect('post_detail', post_id=comment.post.id)
+        return redirect('post_detail', pk=comment.post.pk)
 
     if request.method == 'POST':
         comment.delete()
-        return redirect('post_detail', post_id=comment.post.id)
+        return redirect('post_detail', pk=comment.post.pk)
 
     return render(request, 'blog/delete_comment.html', {'comment': comment})
