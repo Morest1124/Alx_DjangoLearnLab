@@ -32,10 +32,11 @@
         {% if user.is_authenticated %}
             <div class="add-comment">
                 <h3>Add a Comment</h3>
-                <form method="post" action="{% url 'add_comment' post.pk %}">
+                <form method="post" action="{% url 'comment_create' post.pk %}">
                     {% csrf_token %}
                     <div class="form-group">
                         {{ comment_form.content }}
+                        <small class="form-text text-muted">{{ comment_form.content.help_text }}</small>
                         {% if comment_form.content.errors %}
                             <div class="alert alert-error">
                                 {{ comment_form.content.errors }}

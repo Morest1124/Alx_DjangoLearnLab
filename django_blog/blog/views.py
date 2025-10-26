@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Q
+from taggit.models import Tag
 from .forms import UserRegisterForm, UserUpdateForm, PostForm, CommentForm
-from .models import Post, Comment, Tag
+from .models import Post, Comment
 
 class PostListView(ListView):
     model = Post
@@ -97,19 +98,20 @@ def profile(request):
 
     return render(request, 'blog/profile.html', context)
 
-@login_required
-def add_comment(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            messages.success(request, 'Comment added successfully!')
-            return redirect('post_detail', pk=post.pk)
-    return redirect('post_detail', pk=post.pk)
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+    
+    def form_valid(self, form):
+        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        messages.success(self.request, 'Comment added successfully!')
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
@@ -140,7 +142,7 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def posts_by_tag(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
-    posts = Post.objects.filter(tags=tag).order_by('-published_date')
+    posts = Post.objects.filter(tags__name__in=[tag_name]).order_by('-published_date')
     context = {
         'tag': tag,
         'posts': posts,

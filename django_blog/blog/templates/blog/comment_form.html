@@ -9,6 +9,7 @@
         <div class="form-group">
             <label for="{{ form.content.id_for_label }}">Comment:</label>
             {{ form.content }}
+            <small class="form-text text-muted">{{ form.content.help_text }}</small>
             {% if form.content.errors %}
                 <div class="alert alert-error">
                     {{ form.content.errors }}
