@@ -104,14 +104,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blog/comment_form.html'
     
     def form_valid(self, form):
-        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
         form.instance.post = post
         form.instance.author = self.request.user
         messages.success(self.request, 'Comment added successfully!')
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']})
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
@@ -140,14 +140,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
 
-def posts_by_tag(request, tag_name):
-    tag = get_object_or_404(Tag, name=tag_name)
-    posts = Post.objects.filter(tags__name__in=[tag_name]).order_by('-published_date')
-    context = {
-        'tag': tag,
-        'posts': posts,
-    }
-    return render(request, 'blog/posts_by_tag.html', context)
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'
+    context_object_name = 'posts'
+    ordering = ['-published_date']
+    
+    def get_queryset(self):
+        tag_slug = self.kwargs['tag_slug']
+        return Post.objects.filter(tags__slug=tag_slug).order_by('-published_date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag_slug = self.kwargs['tag_slug']
+        context['tag'] = get_object_or_404(Tag, slug=tag_slug)
+        return context
 
 def search_posts(request):
     query = request.GET.get('q', '')
