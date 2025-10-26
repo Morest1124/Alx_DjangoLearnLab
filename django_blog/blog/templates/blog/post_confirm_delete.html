@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Delete Post</h1>
+    
+    <div class="post">
+        <h2>{{ post.title }}</h2>
+        <p class="post-meta">Published on: {{ post.published_date }} by {{ post.author }}</p>
+        <p>Are you sure you want to delete this post?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'post_detail' post.pk %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

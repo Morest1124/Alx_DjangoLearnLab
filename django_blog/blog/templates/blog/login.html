@@ -1,20 +1,33 @@
-{% extends "blog/post_list.html" %}
+{% extends 'blog/base.html' %}
+{% load static %}
+
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Log In</legend>
-                {{ form.as_p }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Login</button>
-            </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-            </small>
+    <h1>Log In</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="alert alert-error">
+                    {{ form.username.errors }}
+                </div>
+            {% endif %}
         </div>
-    </div>
-{% endblock content %}
+        
+        <div class="form-group">
+            <label for="{{ form.password.id_for_label }}">Password:</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="alert alert-error">
+                    {{ form.password.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    
+    <p>Need an account? <a href="{% url 'register' %}">Sign Up Now</a></p>
+{% endblock %}
