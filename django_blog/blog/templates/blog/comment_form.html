@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Edit Comment</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">Comment:</label>
+            {{ form.content }}
+            <small class="form-text text-muted">{{ form.content.help_text }}</small>
+            {% if form.content.errors %}
+                <div class="alert alert-error">
+                    {{ form.content.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update Comment</button>
+        <a href="{% url 'post_detail' object.post.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}
